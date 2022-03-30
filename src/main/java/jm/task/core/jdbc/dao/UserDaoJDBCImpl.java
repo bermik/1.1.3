@@ -23,13 +23,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public void createUsersTable() {
         try (Statement statement = Util.getConnection().createStatement()){
             //if table doesn't exist then create
-            if (!Util.getConnection()
-                    .getMetaData()
-                    .getTables(null, null, "UsersTable", new String[] {"TABLE"})
-                    .next()) {
-                statement.executeUpdate("CREATE TABLE UsersTable (id BIGINT primary key auto_increment, name VARCHAR(40), lastName VARCHAR(40), age TINYINT)");
-                Util.getConnection().commit();
-            }
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS UsersTable (id BIGINT primary key auto_increment, name VARCHAR(40), lastName VARCHAR(40), age TINYINT)");
+            Util.getConnection().commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,14 +32,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try (Statement statement = Util.getConnection().createStatement()){
-            //if table exists then drop
-            if (Util.getConnection()
-                    .getMetaData()
-                    .getTables(null, null, "UsersTable", new String[] {"TABLE"})
-                    .next()) {
-                statement.executeUpdate("DROP TABLE UsersTable");
-                Util.getConnection().commit();
-            }
+            statement.executeUpdate("DROP TABLE IF EXISTS UsersTable");
+            Util.getConnection().commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
