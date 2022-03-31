@@ -13,11 +13,25 @@ public class Util {
     public Util() {
     }
 
-    public static Connection getConnection() throws SQLException{
+    public static Connection getConnection() {
         if (connection == null) {
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            connection.setAutoCommit(false);
+            try {
+                connection = DriverManager.getConnection(URL, USER, PASSWORD);
+                connection.setAutoCommit(false);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return connection;
+    }
+
+    public static void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
